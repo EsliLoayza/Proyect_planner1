@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner de Autor Final</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fdf6e9;
+        }
+        .page {
+            width: 25cm; 
+            height: 25cm;
+            padding: 1.8cm;
+            margin: 1cm auto;
+            background: #fffbf5;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .background-silhouettes {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;
+        }
+        .silhouette {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.05;
+        }
+        #silhouette-1 {
+            width: 20cm; height: 20cm;
+            background: #F28B82;
+            top: -10cm; left: -10cm;
+        }
+        #silhouette-2 {
+            width: 25cm; height: 25cm;
+            background: #FADAC5;
+            bottom: -15cm; right: -12cm;
+        }
+        .image-container {
+            position: absolute;
+            z-index: 20; /* Por encima de todo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        #title-image {
+            width: 5cm; height: 5cm;
+            top: 0.8cm; left: 0.8cm;
+        }
+        #bottom-left-image {
+            width: 6cm; height: 6cm;
+            bottom: 1cm; left: 1cm;
+        }
+        #bottom-right-image {
+            width: 5cm; height: 5cm;
+            bottom: 1cm; right: 1cm;
+        }
+        .printable-area {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto repeat(4, 1fr);
+            gap: 0.8cm 0.8cm;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 10;
+        }
+        .main-title {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centramos el título para mejor balance */
+            padding-bottom: 0.5cm;
+            position: relative;
+        }
+        .main-title h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 4.5rem;
+            text-align: center;
+        }
+        .day-box, .side-box {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(3px);
+            border: 2px solid #FADAC5;
+            border-radius: 1.2rem;
+            padding: 0.5cm;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+     
+
+
+        .box-title {
+            font-weight: 600;
+            color: #B58A6F;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+ 
+
+        .notes-content {
+            flex-grow: 1;
+            background-image: repeating-linear-gradient(to bottom, #FADAC5, #FADAC5 1px, transparent 1px, transparent 1.2rem);
+            background-size: 100% 1.2rem;
+        }
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: #F28B82;
+        }
+
+        @media print {
+            body { background-color: white; margin: 0; }
+            @page {
+                size: 60cm 60cm;
+                margin: 1.8cm;
+            }
+            .page { 
+                width: 100%; height: 100%; margin: 0; padding: 0;
+                box-shadow: none; border-radius: 0; border: none;
+                background: white; overflow: visible;
+            }
+            .print-button { display: none; }
+             .day-box, .side-box {
+                border: 2px solid #ccc;
+                 -webkit-print-color-adjust: exact; color-adjust: exact;
+                 background-color: white !important;
+                 backdrop-filter: none !important;
+            }
+             .notes-content {
+                background-image: repeating-linear-gradient(to bottom, #ccc, #ccc 1px, transparent 1px, transparent 1.2rem);
+                 -webkit-print-color-adjust: exact; color-adjust: exact;
+            }
+            h1, .box-title { -webkit-print-color-adjust: exact; color-adjust: exact; }
+            .main-title span { color: black !important; }
+            .background-silhouettes { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <button onclick="window.print()" class="print-button text-white font-bold py-3 px-5 rounded-full shadow-lg hover:bg-red-500 transition duration-300 ease-in-out transform hover:scale-105">
+        Exportar como PDF
+    </button>
+
+    <div class="page">
+        <!-- Contenedores para las imágenes -->
+        <div class="background-silhouettes">
+            <div id="silhouette-1" class="silhouette"></div>
+            <div id="silhouette-2" class="silhouette"></div>
+        </div>
+        
+        <!-- INSTRUCCIONES: Reemplaza los src="" con los enlaces a tus imágenes PNG -->
+        <div id="title-image" class="image-container">
+            <img src="/img/carpincho.png" width="70px" alt="Coloca tu imagen PNG para el título aquí">
+        </div>
+        <div id="bottom-left-image" class="image-container">
+            <img src="/img/planificador.png" width="70px" alt="Coloca tu imagen PNG aquí">
+        </div>
+        <div id="bottom-right-image" class="image-container">
+            <img src="/img/arbol-del-dinero (2).png" width="90px" alt="Coloca tu imagen PNG aquí">
+        </div>
+
+        <div class="printable-area">
+            <div class="main-title">
+                <h1>
+                    <span style="color: #F28B82;">PLANNER</span>
+                    <span style="color: #8D6E63;">SEMANAL</span>
+                </h1>
+            </div>
+
+            <!-- Fila 2 -->
+            <div class="side-box" style="background-color: #f8e2a5;"><div class="box-title">Fecha</div></div>
+            <div class="day-box"><div class="box-title">Lunes</div></div>
+            <div class="day-box"><div class="box-title">Martes</div></div>
+            
+            <!-- Fila 3 -->
+            <div class="side-box" style="grid-row: 3 / 6;"><div class="box-title">Notas</div><div class="notes-content"></div></div>
+            <div class="day-box"><div class="box-title">Miércoles</div></div>
+            <div class="day-box"><div class="box-title">Jueves</div></div>
+            
+            <!-- Fila 4 -->
+            <div class="day-box"><div class="box-title">Viernes</div></div>
+            <div class="day-box" style="grid-column: 3 / 4; grid-row: 4 / 6;">
+                <div class="box-title">Domingo</div>
+            </div>
+
+            <!-- Fila 5 -->
+            <div class="day-box" style="grid-column: 2 / 3; grid-row: 5;">
+                <div class="box-title">Sábado</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
